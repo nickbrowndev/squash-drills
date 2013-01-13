@@ -1,0 +1,8 @@
+#Binary files
+*.class
+
+#Log Files
+*.log
+
+# OS generated files
+Thumbs.db
