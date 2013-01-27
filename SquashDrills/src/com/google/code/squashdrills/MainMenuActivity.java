@@ -33,14 +33,14 @@ public class MainMenuActivity extends Activity {
             }
         });
 		
-		Button btnPersonalRecords = (Button) findViewById(R.id.navPersonalRecords);
+		/*Button btnPersonalRecords = (Button) findViewById(R.id.navPersonalRecordsMenu);
 		btnPersonalRecords.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 Intent i = new Intent();
                 i.setClassName("com.google.code.squashdrills", "com.google.code.squashdrills.PersonalRecordsMenuActivity");
                 startActivity(i);
             }
-        });
+        });*/
 	}
 	
 	@Override

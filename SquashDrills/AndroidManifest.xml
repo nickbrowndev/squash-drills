@@ -18,6 +18,15 @@
         <activity
             android:name="com.google.code.squashdrills.MainMenuActivity"
             android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.google.code.squashdrills.RoutineMenuActivity"
+            android:label="@string/title_activity_routine_menu" >
         </activity>
         <activity
             android:name="com.google.code.squashdrills.PlayRoutineActivity"
@@ -27,14 +36,9 @@
             android:name="com.google.code.squashdrills.PersonalRecordsMenuActivity"
             android:label="@string/title_activity_personal_records_menu" >
         </activity>
-        <activity
-            android:name="com.google.code.squashdrills.RoutineMenuActivity"
-            android:label="@string/title_activity_routine_menu" >
-        </activity>
-        
-        <action android:name="android.intent.action.MAIN" />
 
-        <category android:name="android.intent.category.LAUNCHER" />
+        
+
     </application>
 
 </manifest>

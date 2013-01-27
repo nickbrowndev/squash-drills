@@ -12,6 +12,9 @@ public class Routine {
 	private int id;
 	@DatabaseField
 	private String name;
+	private int numberOfStations = 6;
+	private long delayBetweenStations = 3000;
+	private int numberOfReps = 20;
 	
 	public Routine() {
 		
@@ -35,6 +38,34 @@ public class Routine {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void setNumberOfStations(int numberOfStations) {
+		this.numberOfStations = numberOfStations;
+	}
+	
+	public int getNumberOfStations() {
+		return this.numberOfStations;
+	}
+	
+	/*public void setDelayBetweenStations(double delayBetweenStations) {
+		this.delayBetweenStations  = delayBetweenStations / 1000;
+	}*/
+	
+	/*public double getDelayBetweenStations() {
+		return this.delayBetweenStations;
+	}*/
+	
+	public long getDelayBetweenStations() {
+		return this.delayBetweenStations;
+	}
+
+	public int getNumberOfReps() {
+		return numberOfReps;
+	}
+
+	public void setNumberOfReps(int numberOfReps) {
+		this.numberOfReps = numberOfReps;
 	}
 	
 }
