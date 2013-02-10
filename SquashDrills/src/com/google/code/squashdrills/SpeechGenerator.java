@@ -10,7 +10,7 @@ import android.content.Intent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.widget.Toast;
-public class SpeechGenerator implements ValueChangeListener {
+public class SpeechGenerator implements ValueChangeListener<Integer> {
 	
 	private TextToSpeech tts;
 	private boolean ttsInitiated = false;
@@ -30,7 +30,7 @@ public class SpeechGenerator implements ValueChangeListener {
 		tts.setLanguage(Locale.UK);
 	}
 	@Override
-	public void notifyValueChanged(int value) {
+	public void notifyValueChanged(Integer value) {
 		if (ttsInitiated) {
 			tts.speak(String.valueOf(value), TextToSpeech.QUEUE_FLUSH, null);
 		}

@@ -5,13 +5,14 @@ import com.google.code.squashdrills.R;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.media.SoundPool.OnLoadCompleteListener;
+import android.util.Log;
 
 public class SoundManager {
 
 	private SoundPool soundPool;
 	private boolean soundPoolInitialised = false;
-	private final String COUNTDOWN_BEEP_SHORT = "assets/sounds/countdown_beep_25ms.mp3";
-	private final String COUNTDOWN_BEEP_LONG = "assets/sounds/countdown_beep_50ms.mp3";
+	private final String COUNTDOWN_BEEP_SHORT = "sounds/countdown_beep_25ms.mp3";
+	private final String COUNTDOWN_BEEP_LONG = "sounds/countdown_beep_50ms.mp3";
 	final int COUNTDOWN_BEEP_SHORT_ID;
 	final int COUNTDOWN_BEEP_LONG_ID;
 	
@@ -26,7 +27,8 @@ public class SoundManager {
 	          int status) {
 	    	  switch (status) {
 	    	  	case 0 : soundPoolInitialised = true; break;
-	    	  }
+	    	  	default : Log.e(this.getClass().getName(), "Sound Pool Not initialised correctly");
+	    	  } 
 	      }
 	    });
 	    
@@ -36,11 +38,11 @@ public class SoundManager {
 	}
 	
 	private void playSound(int soundId) {
-		if (soundPoolInitialised) {
+		//if (soundPoolInitialised) {
 		soundPool.play(soundId, volume, volume, 1, 0, 1.0f);
-		} else {
-			throw new RuntimeException("Attempted to run sound while sound pool not initialised");
-		}
+		//} else {
+		//	throw new RuntimeException("Attempted to run sound while sound pool not initialised");
+		//}
 	    
 	}
 	

@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
+import android.os.CountDownTimer;
 import android.util.Log;
 
+import com.google.code.squashdrills.listener.ActionCompleteListener;
 import com.google.code.squashdrills.listener.ValueChangeListener;
 import com.google.code.squashdrills.model.Routine;
 import com.google.code.squashdrills.sequencer.RandomSequencer;
@@ -20,11 +23,15 @@ public class RoutineRunner {
 	private boolean runRoutine = false;
 	private Routine routine;
 	private Sequencer randomSequencer;
-	private Sequencer countdownSequencer;
 	private int currentValue;
+	private Integer numberOfReps = null;
 	
-	private List<ValueChangeListener> valueChangeListeners = new ArrayList<ValueChangeListener>();
-	ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
+
+
+	private List<ValueChangeListener<Integer>> nextValueListeners = new ArrayList<ValueChangeListener<Integer>>();
+	private List<ActionCompleteListener> routineCompleteListener = new ArrayList<ActionCompleteListener>();
+	private ScheduledExecutorService scheduler =  Executors.newScheduledThreadPool(1);
+	final SoundManager soundManager = new SoundManager(1.0f);
 	
 	public RoutineRunner(Routine routine) {
 		// ignore set routine, use default for now
@@ -43,54 +50,27 @@ public class RoutineRunner {
 		runRoutine = true;
 		//runningRoutine = new Thread(
 		//ScheduledFuture mainRunner = scheduler.scheduleAtFixedRate(
-		Callable<?> routineRunner = Executors.callable(new Runnable() {
+		Runnable routineRunner = new Runnable() {
 
 			@Override
 			public void run() {		
-				while (randomSequencer.hasNextValue()) {
+				if (randomSequencer.hasNextValue()) {
 					setCurrentValue(randomSequencer.getNextValue() + 1);
 					Log.d(this.getClass().getName(), "Set Value to " + getCurrentValue());
 				}
 			}
 
 
-		});
+		};
 		
-		Callable<?> countdownRunner = Executors.callable(new Runnable() {
-
-			@Override
-			public void run() {		
-				while (countdownSequencer.hasNextValue()) {
-					setCurrentValue(countdownSequencer.getNextValue());
-				}
-			}
-		});
-		
-		final SoundManager soundManager = new SoundManager(1.0f);
-		
-		Callable<?> countdownShortBeep = Executors.callable(new Runnable() {
-
-			@Override
-			public void run() {		
-				soundManager.playCountdownShortBeep();
-			}
-		});
-		
-		Callable<?> countdownLongBeep = Executors.callable(new Runnable() {
-
-			@Override
-			public void run() {		
-				soundManager.playCountdownShortBeep();
-			}
-		});
-		
-		
+		ScheduledFuture<?> future = scheduler.scheduleAtFixedRate(routineRunner, 0, routine.getDelayBetweenStations(), TimeUnit.MILLISECONDS);
 		
 		//, 10, routine.getDelayBetweenStations(), TimeUnit.MILLISECONDS);
 		Log.d(this.getClass().getName(), "RoutineSchedulor started");
 		
 		
 	}
+	
 	
 	public void stop() {
 		scheduler.shutdownNow();
@@ -104,24 +84,36 @@ public class RoutineRunner {
 		return this.routine;
 	}
 	
-	public void addValueChangeListener(ValueChangeListener listener) {
-		valueChangeListeners.add(listener);
+	public void addNextValueListener(ValueChangeListener<Integer> listener) {
+		nextValueListeners.add(listener);
 	}
 	
-	public void removeValueChangeListener(ValueChangeListener listener) {
-		valueChangeListeners.remove(listener);
+	public void addRoutineCompleteListener(ActionCompleteListener listener) {
+		routineCompleteListener.add(listener);
+	}
+	
+	public void removeNextValueListener(ValueChangeListener<Integer> listener) {
+		nextValueListeners.remove(listener);
 	}
 	
 	private void setCurrentValue(int currentValue) {
 		this.currentValue = currentValue;
 		Log.d(this.getClass().getName(), "Value changed to: " + currentValue + ". Notifying listeners...");
-		for (ValueChangeListener listener : valueChangeListeners) {
+		for (ValueChangeListener<Integer> listener : nextValueListeners) {
 			listener.notifyValueChanged(currentValue);
 		}
 	}
 	
 	private int getCurrentValue() {
 		return currentValue;
+	}
+	
+	private Integer getNumberOfReps() {
+		return numberOfReps;
+	}
+
+	private void setNumberOfReps(Integer numberOfReps) {
+		this.numberOfReps = numberOfReps;
 	}
 }
 

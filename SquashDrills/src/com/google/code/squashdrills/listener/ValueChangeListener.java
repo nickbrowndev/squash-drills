@@ -1,6 +1,6 @@
 package com.google.code.squashdrills.listener;
 
-public interface ValueChangeListener {
+public interface ValueChangeListener<T> {
 	
-	public void notifyValueChanged(int value);
+	public void notifyValueChanged(T value);
 }
